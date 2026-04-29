@@ -1,66 +1,82 @@
-# ESP32 LED Controller
+# ESP32 LED Controller User Guide
 
-ESP-IDF firmware untuk LED controller bergaya SP107E dengan Web UI lokal,
-mode basic/normal, reactive audio dari INMP441, matrix mode, dan display bulat
-GC9A01.
+Firmware LED controller untuk ESP32 family dengan Web UI lokal, mode basic,
+reactive audio INMP441, matrix mode, dan display bulat GC9A01.
 
-## Features
+## Pilih Firmware Sesuai Board
 
-- ESP32 family target-aware build: `esp32`, `esp32s2`, `esp32s3`, `esp32c3`, `esp32c6`
-- Addressable LED strip: WS2812B, WS2811, SK6812 RGB/RGBW
-- Normal/basic strip effects
-- Reactive strip effects from INMP441 I2S microphone
-- Matrix and reactive matrix effects
-- GC9A01 240 x 240 display for boot animation, status, FPS/WiFi, and visualizer
-- Web UI hosted directly on ESP32 SoftAP
-- JSON HTTP API
-- Config persistence through ESP-IDF NVS
-- GitHub Actions release builds with ZIP per target board
-- Automatic `CHANGELOG.md` generation from release commits
+Download ZIP firmware dari halaman GitHub Release sesuai chip board yang dipakai:
 
-## Documentation
-
-| Document | Purpose |
+| Board / Chip | File ZIP |
 | --- | --- |
-| [docs/architecture.md](docs/architecture.md) | Firmware architecture, tasks, data flow, modules. |
-| [docs/hardware.md](docs/hardware.md) | Wiring, default pins, power notes, target pin maps. |
-| [docs/usage.md](docs/usage.md) | Web UI usage, modes, display, audio, troubleshooting. |
-| [docs/api.md](docs/api.md) | HTTP API endpoints and payload examples. |
-| [docs/target-builds.md](docs/target-builds.md) | Build, flash, package, and GitHub release workflow. |
-| [CHANGELOG.md](CHANGELOG.md) | Generated release changelog. |
+| ESP32 DevKit / ESP32-WROOM | `led-controller-<version>-esp32.zip` |
+| ESP32-S2 | `led-controller-<version>-esp32s2.zip` |
+| ESP32-S3 | `led-controller-<version>-esp32s3.zip` |
+| ESP32-C3 | `led-controller-<version>-esp32c3.zip` |
+| ESP32-C6 | `led-controller-<version>-esp32c6.zip` |
 
-## Quick Start
+Jangan flash firmware untuk target berbeda. Binary `esp32` tidak bisa dipakai
+untuk `esp32s3`, `esp32c3`, atau target lain.
 
-Standard ESP-IDF flow:
+## Wiring Singkat
 
-```bash
-. $IDF_PATH/export.sh
-idf.py set-target esp32
-idf.py build
-idf.py -p <PORT> flash monitor
+Gunakan power supply eksternal untuk LED dan sambungkan semua GND bersama.
+
+### ESP32 Default
+
+| Function | GPIO |
+| --- | --- |
+| LED data | 5 |
+| INMP441 BCLK | 26 |
+| INMP441 WS | 25 |
+| INMP441 DOUT | 33 |
+| GC9A01 SCLK | 18 |
+| GC9A01 SDA/MOSI | 23 |
+| GC9A01 CS | 15 |
+| GC9A01 DC | 2 |
+| GC9A01 RST | 4 |
+
+### ESP32-S3 Default
+
+| Function | GPIO |
+| --- | --- |
+| LED data | 5 |
+| INMP441 BCLK | 6 |
+| INMP441 WS | 7 |
+| INMP441 DOUT | 15 |
+| GC9A01 SCLK | 12 |
+| GC9A01 SDA/MOSI | 11 |
+| GC9A01 CS | 10 |
+| GC9A01 DC | 9 |
+| GC9A01 RST | 8 |
+
+Untuk ESP32-S2/C3/C6, lihat [docs/hardware.md](docs/hardware.md).
+
+GC9A01 `BL/BLK` tidak dipakai firmware. Jika modul punya pin itu, sambungkan ke
+3.3V.
+
+## Flash Firmware
+
+Extract ZIP yang sesuai board, lalu flash dari dalam folder hasil extract.
+
+Windows:
+
+```bat
+flash.bat COM5
 ```
 
-For ESP32-S3:
+Linux/macOS:
 
 ```bash
-. $IDF_PATH/export.sh
-idf.py set-target esp32s3
-idf.py build
-idf.py -p <PORT> flash monitor
+chmod +x flash.sh
+./flash.sh /dev/ttyUSB0
 ```
 
-Cross-platform helper:
+Ganti `COM5` atau `/dev/ttyUSB0` sesuai port board.
 
-```bash
-python tools/firmware.py build --target esp32s3
-python tools/firmware.py flash --target esp32s3 --port <PORT> --monitor
-```
+## Connect ke Web UI
 
-Use `python3` on Linux/macOS if `python` is not available.
-
-## Default WiFi
-
-After boot, connect to:
+Setelah boot, controller membuat WiFi AP:
 
 | Field | Value |
 | --- | --- |
@@ -68,62 +84,75 @@ After boot, connect to:
 | Password | `12345678` |
 | Web UI | `http://192.168.4.1` |
 
-## Project Layout
+Connect HP/laptop ke WiFi tersebut, lalu buka `http://192.168.4.1`.
 
-```text
-led-controller/
-|-- .github/workflows/          # CI/CD release firmware builds
-|-- components/
-|   |-- app_controller/         # runtime orchestrator and tasks
-|   |-- config_manager/         # defaults, validation, NVS
-|   |-- led_driver/             # LED RMT abstraction
-|   |-- web_server/             # HTTP API and embedded Web UI
-|   |-- wifi_service/           # SoftAP service
-|   |-- audio_input/            # INMP441 I2S input
-|   |-- audio_processor/        # audio features and spectrum
-|   |-- reactive_engine/        # audio task lifecycle
-|   |-- reactive_renderer/      # strip audio visualizers
-|   |-- matrix_engine/          # matrix mapping/effects
-|   |-- reactive_matrix_renderer/
-|   |-- display_manager/        # GC9A01 display integration
-|   |-- effect_registry/        # effect metadata
-|   |-- palette_manager/
-|   |-- random_effect_manager/
-|   `-- system_monitor/
-|-- docs/
-|-- main/
-|-- src/display/                # display rendering implementation
-|-- tools/
-|   |-- firmware.py             # build/flash helper
-|   `-- package_release.py      # board ZIP packager
-|-- partitions.csv
-|-- sdkconfig.defaults
-`-- CMakeLists.txt
-```
+## Setup Pertama
 
-## Release Artifacts
+1. Buka Web UI.
+2. Set LED type sesuai strip: WS2812B, WS2811, atau SK6812.
+3. Set LED count sesuai jumlah LED.
+4. Pastikan LED data pin benar.
+5. Pilih mode:
+   - `Normal` untuk efek basic.
+   - `Reactive` untuk efek audio INMP441.
+   - `Matrix` untuk layout panel.
+   - `Reactive Matrix` untuk visualizer audio matrix.
+6. Pilih effect.
+7. Atur brightness, speed, palette, sensitivity, dan display.
+8. Simpan konfigurasi.
 
-Publishing a GitHub Release builds and attaches one ZIP per target:
+Setting akan tersimpan, jadi setelah restart controller akan memakai setting
+terakhir.
 
-```text
-led-controller-<tag>-esp32.zip
-led-controller-<tag>-esp32s2.zip
-led-controller-<tag>-esp32s3.zip
-led-controller-<tag>-esp32c3.zip
-led-controller-<tag>-esp32c6.zip
-```
+## Mode Utama
 
-Each ZIP includes app binary, bootloader, partition table, flash args, and
-simple `flash.sh` / `flash.bat` scripts.
+| Mode | Fungsi |
+| --- | --- |
+| Normal | Efek LED biasa seperti solid, rainbow, comet, fire, twinkle. |
+| Reactive | Efek strip mengikuti audio dari INMP441. |
+| Matrix | Efek untuk susunan LED panel 2D. |
+| Reactive Matrix | Visualizer audio untuk matrix/panel. |
 
-## Hardware Notes
+## Display GC9A01
 
-Start from [docs/hardware.md](docs/hardware.md). The most important points:
+Saat boot, display menampilkan animasi/status awal. Setelah boot, display
+menampilkan visualizer dan status realtime seperti WiFi dan FPS.
 
-- Use external LED power.
-- Connect ESP32 GND and LED power supply GND together.
-- Use the correct target-specific pin map.
-- Do not flash an `esp32` binary to an `esp32s3` board.
+Display bisa diatur dari Web UI:
+
+- enable/disable
+- brightness
+- view mode: auto, status, spectrum, VU meter, waveform
+- show FPS
+- show WiFi status
+
+## Tips Reactive Audio
+
+- INMP441 harus pakai 3.3V.
+- Jika reactive terlalu sensitif saat ruangan diam, naikkan noise gate.
+- Jika kurang responsif, naikkan sensitivity atau gain.
+- Jika gerakan terlalu kasar, naikkan smoothing.
+- Reactive audio hanya aktif di mode `Reactive` dan `Reactive Matrix`.
+
+## Troubleshooting
+
+| Masalah | Cek |
+| --- | --- |
+| LED tidak menyala | Common ground, power supply, LED count, data pin. |
+| Warna salah | LED type di Web UI sudah benar. |
+| LED flicker | Pasang resistor data 330-470 ohm dan kapasitor 1000 uF. |
+| Web UI tidak terbuka | Pastikan masih connect ke `PixelController-Setup`. |
+| Reactive tidak bergerak | Cek wiring INMP441 dan mode sudah `Reactive`. |
+| LCD blank | Cek pin SCLK, SDA/MOSI, CS, DC, RST, dan power 3.3V. |
+| Salah firmware | Download ZIP sesuai target board lalu flash ulang. |
+
+## Dokumentasi Lanjutan
+
+- [Hardware detail](docs/hardware.md)
+- [Cara pakai Web UI](docs/usage.md)
+- [Build dan flash manual](docs/target-builds.md)
+- [HTTP API](docs/api.md)
+- [Arsitektur firmware](docs/architecture.md)
 
 ## License
 
