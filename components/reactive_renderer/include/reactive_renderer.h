@@ -1,0 +1,22 @@
+#pragma once
+
+#include "esp_err.h"
+#include <stdint.h>
+#include "config_manager.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+esp_err_t reactive_renderer_init(void);
+esp_err_t reactive_renderer_set_effect(reactive_effect_t effect);
+reactive_effect_t reactive_renderer_get_effect(void);
+esp_err_t reactive_renderer_update(uint32_t delta_ms);
+esp_err_t reactive_renderer_reset(void);
+
+/* Push current config snapshot — avoids NVS reads each frame */
+esp_err_t reactive_renderer_set_params(const app_config_t *cfg);
+
+#ifdef __cplusplus
+}
+#endif

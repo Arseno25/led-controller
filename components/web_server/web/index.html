@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>Pixel Controller</title>
+<style>
+:root{--bg:#020617;--panel:#0f172a;--panel2:#111827;--input:#020617;--line:#1e293b;--text:#f8fafc;--muted:#94a3b8;--dim:#64748b;--accent:#2dd4bf;--accent2:#facc15;--danger:#fb7185;--ok:#22c55e;--shadow:0 24px 70px rgba(0,0,0,.42)}
+*{box-sizing:border-box}html{color-scheme:dark}body{margin:0;min-height:100vh;background:linear-gradient(180deg,#020617 0%,#08111f 52%,#020617 100%);color:var(--text);font:14px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;letter-spacing:0}
+button,input,select{font:inherit}button{touch-action:manipulation}.wrap{width:min(1040px,100%);margin:0 auto;padding:14px 14px 28px}.top{position:sticky;top:0;z-index:20;background:rgba(2,6,23,.88);border-bottom:1px solid var(--line);backdrop-filter:blur(16px)}.top-in{width:min(1040px,100%);margin:0 auto;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:14px}.brand{min-width:0}.brand h1{font-size:19px;line-height:1.1;margin:0;font-weight:780}.sub{color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.status{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}.pill{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:rgba(15,23,42,.78);border-radius:999px;color:var(--muted);padding:7px 10px;font-size:12px;line-height:1}.dot{width:7px;height:7px;border-radius:50%;background:var(--ok)}.dot.off{background:var(--danger)}.grid{display:grid;grid-template-columns:1fr;gap:12px}.card{background:rgba(15,23,42,.92);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:14px}.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.kicker{color:var(--dim);font-size:11px;text-transform:uppercase;font-weight:800}.muted{color:var(--muted);font-size:12px}.stack{display:grid;gap:12px}.row{display:grid;grid-template-columns:1fr;gap:10px}.row.two{grid-template-columns:1fr 1fr}.summary{display:grid;grid-template-columns:1fr 1fr;gap:8px}.tile{border:1px solid var(--line);background:rgba(2,6,23,.72);border-radius:10px;padding:10px;min-width:0}.tile span{display:block;color:var(--dim);font-size:11px}.tile b{display:block;color:var(--text);font-size:16px;font-weight:760;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.field{display:grid;gap:6px}.field label{display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--muted);font-size:12px}.val{color:var(--accent);font-variant-numeric:tabular-nums}input,select{width:100%;min-height:42px;border:1px solid var(--line);background:var(--input);color:var(--text);border-radius:10px;padding:9px 10px;outline:none}select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 16px) 18px,calc(100% - 11px) 18px;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:32px}input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(45,212,191,.14)}input[type=range]{min-height:28px;padding:0;background:transparent;accent-color:var(--accent)}input[type=color]{padding:3px;height:42px}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:#111827;color:var(--text);border-radius:10px;min-height:42px;padding:10px 13px;font-weight:760;cursor:pointer}.btn:hover{border-color:var(--accent)}.btn.primary{background:var(--accent);border-color:var(--accent);color:#042f2e}.btn.danger{color:var(--danger);border-color:rgba(251,113,133,.5)}.btn.ghost{background:transparent}.btn.grow{flex:1}.switch{position:relative;display:inline-flex;align-items:center;gap:9px;color:var(--muted);min-height:30px;cursor:pointer;user-select:none}.switch input{position:absolute;opacity:0;width:1px;height:1px}.track{width:48px;height:28px;border-radius:999px;background:#334155;border:1px solid var(--line);position:relative;transition:.18s}.track:after{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#94a3b8;transition:.18s}.switch input:checked+.track{background:rgba(45,212,191,.32);border-color:var(--accent)}.switch input:checked+.track:after{transform:translateX(20px);background:var(--accent)}.meter{height:10px;background:var(--input);border:1px solid var(--line);border-radius:999px;overflow:hidden}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .12s}.preview{overflow:hidden}.preview canvas{display:block;width:100%;aspect-ratio:1/1;border:1px solid var(--line);background:#050707;border-radius:10px}.preview[hidden]{display:none}.modal-backdrop{position:fixed;inset:0;z-index:40;background:rgba(2,6,23,.76);display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(10px)}.modal-backdrop.open{display:flex}.sheet{width:min(860px,100%);max-height:90vh;background:#0f172a;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);display:flex;flex-direction:column}.sheet-head{padding:13px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}.sheet-title{font-size:16px;font-weight:780}.tabs{display:flex;gap:8px;overflow:auto;padding:10px 14px;border-bottom:1px solid var(--line);scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}.tab{white-space:nowrap;border:1px solid var(--line);background:#020617;color:var(--muted);border-radius:999px;min-height:36px;padding:8px 11px;font-weight:700}.tab.active{background:rgba(45,212,191,.16);border-color:var(--accent);color:var(--text)}.sheet-body{overflow:auto;padding:14px}.panel{display:none}.panel.active{display:grid;gap:12px}.toast{position:fixed;left:50%;bottom:18px;z-index:80;transform:translateX(-50%) translateY(12px);opacity:0;pointer-events:none;max-width:min(440px,calc(100vw - 28px));background:#0f172a;border:1px solid var(--line);border-radius:10px;padding:10px 12px;box-shadow:var(--shadow);transition:.18s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}@media(min-width:720px){.wrap{padding-top:18px}.grid{grid-template-columns:1.05fr .95fr}.main{grid-row:span 2}.row{grid-template-columns:1fr 1fr}.summary{grid-template-columns:repeat(4,1fr)}}@media(min-width:980px){.grid{grid-template-columns:1.1fr .9fr .9fr}.main{grid-row:span 2}.preview{grid-column:span 1}}@media(max-width:520px){.status .pill:not(:first-child){display:none}.row.two{grid-template-columns:1fr}.actions{display:grid;grid-template-columns:1fr}.btn{width:100%}.card{padding:13px}.top-in{padding:11px 14px}.brand h1{font-size:18px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <h1>Pixel Controller</h1>
+      <div class="sub" id="deviceLine">Loading</div>
+    </div>
+    <div class="status">
+      <span class="pill"><span class="dot off" id="powerDot"></span><span id="powerLabel">Off</span></span>
+      <span class="pill" id="modeLabel">normal</span>
+      <span class="pill" id="syncLabel">Idle</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="grid">
+    <section class="card main">
+      <div class="card-head">
+        <div>
+          <div class="kicker">Utama</div>
+          <div class="muted" id="activeLine">-</div>
+        </div>
+        <label class="switch" aria-label="Power">
+          <input id="power" type="checkbox"/>
+          <span class="track"></span>
+        </label>
+      </div>
+      <div class="stack">
+        <div class="summary">
+          <div class="tile"><span>Mode</span><b id="summaryMode">-</b></div>
+          <div class="tile"><span>Effect</span><b id="summaryEffect">-</b></div>
+          <div class="tile"><span>Brightness</span><b id="summaryBrightness">0</b></div>
+          <div class="tile"><span>Matrix</span><b id="summaryMatrix">Off</b></div>
+        </div>
+        <div class="row">
+          <div class="field"><label for="mode">Mode</label><select id="mode"><option value="normal">Normal</option><option value="reactive">Reactive</option><option value="matrix">Matrix</option><option value="reactive_matrix">Reactive Matrix</option></select></div>
+          <div class="field"><label for="effect">Effect</label><select id="effect"></select></div>
+        </div>
+        <div class="field"><label for="brightness">Brightness <span class="val" id="brightnessVal">0</span></label><input id="brightness" type="range" min="0" max="255"/></div>
+        <div class="row two" id="colorControls">
+          <div class="field"><label for="primaryColor">Primary</label><input id="primaryColor" type="color"/></div>
+          <div class="field"><label for="secondaryColor">Secondary</label><input id="secondaryColor" type="color"/></div>
+        </div>
+        <div class="actions">
+          <button class="btn primary grow" id="openSettings">Settings</button>
+          <button class="btn" id="randomNext">Next Random</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><div class="kicker">Live Audio</div><div class="muted" id="beatLabel">Beat false</div></div>
+      <div class="stack">
+        <div class="field"><label>Volume <span class="val" id="volumeText">0</span></label><div class="meter"><div class="bar" id="volumeBar"></div></div></div>
+        <div class="summary">
+          <div class="tile"><span>Bass</span><b id="bassText">0</b></div>
+          <div class="tile"><span>Mid</span><b id="midText">0</b></div>
+          <div class="tile"><span>Treble</span><b id="trebleText">0</b></div>
+          <div class="tile"><span>Peak</span><b id="peakText">0</b></div>
+        </div>
+        <div class="summary">
+          <div class="tile"><span>Noise</span><b id="noiseText">0</b></div>
+          <div class="tile"><span>Gate</span><b id="gateText">0</b></div>
+          <div class="tile"><span>AGC</span><b id="agcText">1.00x</b></div>
+          <div class="tile"><span>Clip</span><b id="clipText">0</b></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card preview" id="previewCard" hidden>
+      <div class="card-head"><div class="kicker">Matrix Preview</div><div class="muted" id="previewMeta">16 x 16</div></div>
+      <canvas id="matrixCanvas" width="420" height="420"></canvas>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><div class="kicker">System</div><div class="muted" id="saveState">Save idle</div></div>
+      <div class="summary">
+        <div class="tile"><span>Heap</span><b id="heapText">0 KB</b></div>
+        <div class="tile"><span>FPS</span><b id="fpsText">0</b></div>
+        <div class="tile"><span>Clients</span><b id="clientText">0</b></div>
+        <div class="tile"><span>Audio</span><b id="audioRunText">Off</b></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div class="modal-backdrop" id="settingsModal" role="dialog" aria-modal="true">
+  <section class="sheet">
+    <div class="sheet-head">
+      <div class="sheet-title">Settings</div>
+      <button class="btn ghost" id="closeSettings">Close</button>
+    </div>
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-tab="device">Device</button>
+      <button class="tab" data-tab="led">LED</button>
+      <button class="tab" data-tab="anim">Animation</button>
+      <button class="tab" data-tab="audio">Audio</button>
+      <button class="tab" data-tab="matrix">Matrix</button>
+      <button class="tab" data-tab="display">Display</button>
+      <button class="tab" data-tab="random">Random</button>
+      <button class="tab" data-tab="palette">Palette</button>
+    </div>
+    <div class="sheet-body">
+      <div class="panel active" data-panel="device">
+        <div class="field"><label for="deviceName">Device Name</label><input id="deviceName" maxlength="31"/></div>
+        <div class="actions"><button class="btn danger" id="factoryReset">Factory Reset</button></div>
+      </div>
+
+      <div class="panel" data-panel="led">
+        <div class="field"><label for="ledType">LED Type</label><select id="ledType"><option>WS2812B</option><option>WS2811</option><option>WS2813</option><option>WS2815</option><option>SK6812_RGB</option><option>SK6812_RGBW</option><option>NEON_PIXEL_5V</option><option>NEON_PIXEL_12V</option><option disabled>APA102</option><option disabled>SK9822</option></select></div>
+        <div class="row two">
+          <div class="field"><label for="ledPin">Data Pin</label><input id="ledPin" type="number" min="0" max="48"/></div>
+          <div class="field"><label for="ledCount">LED Count</label><input id="ledCount" type="number" min="1" max="960"/></div>
+        </div>
+      </div>
+
+      <div class="panel" data-panel="anim">
+        <div class="row">
+          <div class="field"><label for="speed">Speed <span class="val" id="speedVal">0</span></label><input id="speed" type="range" min="1" max="255"/></div>
+          <div class="field"><label for="intensity">Intensity <span class="val" id="intensityVal">0</span></label><input id="intensity" type="range" min="0" max="255"/></div>
+        </div>
+        <div class="row">
+          <div class="field"><label for="density">Density <span class="val" id="densityVal">0</span></label><input id="density" type="range" min="0" max="255"/></div>
+          <div class="field"><label for="size">Size <span class="val" id="sizeVal">0</span></label><input id="size" type="range" min="1" max="100"/></div>
+        </div>
+        <div class="row">
+          <div class="field"><label for="tail">Tail <span class="val" id="tailVal">0</span></label><input id="tail" type="range" min="1" max="100"/></div>
+          <div class="field"><label for="fade">Fade <span class="val" id="fadeVal">0</span></label><input id="fade" type="range" min="0" max="255"/></div>
+        </div>
+        <div class="row">
+          <div class="field"><label for="cooling">Cooling <span class="val" id="coolingVal">0</span></label><input id="cooling" type="range" min="1" max="255"/></div>
+          <div class="field"><label for="sparking">Sparking <span class="val" id="sparkingVal">0</span></label><input id="sparking" type="range" min="1" max="255"/></div>
+        </div>
+        <div class="row">
+          <div class="field"><label for="direction">Direction</label><select id="direction"><option value="forward">Forward</option><option value="reverse">Reverse</option><option value="bounce">Bounce</option></select></div>
+          <div class="field"><label for="customPattern">Custom Pattern</label><select id="customPattern"><option value="dot">Dot</option><option value="bar">Bar</option><option value="gradient">Gradient</option><option value="wave">Wave</option><option value="random_spark">Random Spark</option><option value="dual_color_chase">Dual Color Chase</option></select></div>
+        </div>
+        <div class="field" id="backgroundColorField"><label for="backgroundColor">Background</label><input id="backgroundColor" type="color"/></div>
+        <div class="actions">
+          <label class="switch"><input id="loop" type="checkbox"/><span class="track"></span>Loop</label>
+          <label class="switch"><input id="mirror" type="checkbox"/><span class="track"></span>Mirror</label>
+          <label class="switch"><input id="randomColor" type="checkbox"/><span class="track"></span>Random Color</label>
+        </div>
+      </div>
+
+      <div class="panel" data-panel="audio">
+        <div class="row">
+          <div class="field"><label for="i2sBclk">BCLK Pin</label><input id="i2sBclk" type="number" min="0" max="48"/></div>
+          <div class="field"><label for="i2sWs">WS Pin</label><input id="i2sWs" type="number" min="0" max="48"/></div>
+        </div>
+        <div class="row">
+          <div class="field"><label for="i2sData">DATA Pin</label><input id="i2sData" type="number" min="0" max="48"/></div>
+          <div class="field"><label for="sampleRate">Sample Rate</label><input id="sampleRate" type="number" min="8000" max="48000"/></div>
+        </div>
+        <div class="row">
+          <div class="field"><label for="bufferSize">Buffer</label><input id="bufferSize" type="number" min="64" max="2048"/></div>
+          <div class="field"><label for="fftSize">FFT Size</label><input id="fftSize" type="number" min="64" max="2048"/></div>
+        </div>
+        <div class="row">
+          <div class="field"><label for="sensitivity">Sensitivity <span class="val" id="sensitivityVal">0</span></label><input id="sensitivity" type="range" min="1" max="255"/></div>
+          <div class="field"><label for="gain">Gain <span class="val" id="gainVal">0</span></label><input id="gain" type="range" min="1" max="255"/></div>
+        </div>
+        <div class="row">
+          <div class="field"><label for="smoothing">Smoothing <span class="val" id="smoothingVal">0</span></label><input id="smoothing" type="range" min="0" max="100"/></div>
+          <div class="field"><label for="spectrumBands">Bands</label><input id="spectrumBands" type="number" min="1" max="16"/></div>
+        </div>
+        <div class="row">
+          <div class="field"><label for="noiseGate">Noise Gate</label><input id="noiseGate" type="number" min="0" max="5000"/></div>
+          <div class="field"><label for="beatThreshold">Beat Threshold</label><input id="beatThreshold" type="number" min="1" max="5000"/></div>
+        </div>
+        <div class="actions">
+          <label class="switch"><input id="autoGain" type="checkbox"/><span class="track"></span>Auto Gain</label>
+          <label class="switch"><input id="fftEnabled" type="checkbox"/><span class="track"></span>Spectrum</label>
+          <label class="switch"><input id="bassBoost" type="checkbox"/><span class="track"></span>Bass Boost</label>
+          <label class="switch"><input id="trebleBoost" type="checkbox"/><span class="track"></span>Treble Boost</label>
+        </div>
+      </div>
+
+      <div class="panel" data-panel="matrix">
+        <label class="switch"><input id="matrixEnabled" type="checkbox"/><span class="track"></span>Matrix Power</label>
+        <div class="row two">
+          <div class="field"><label for="matrixWidth">Segments</label><input id="matrixWidth" type="number" min="1" max="32"/></div>
+          <div class="field"><label for="matrixHeight">LED per Segment</label><input id="matrixHeight" type="number" min="1" max="32"/></div>
+        </div>
+        <div class="tile"><span>Total LED target</span><b id="matrixTotal">0</b></div>
+        <div class="actions"><button class="btn" id="matchLedCount">Match LED Count</button></div>
+        <div class="row">
+          <div class="field"><label for="matrixLayout">Layout</label><select id="matrixLayout"><option value="serpentine">Serpentine</option><option value="progressive">Progressive</option></select></div>
+          <div class="field"><label for="matrixOrigin">Origin</label><select id="matrixOrigin"><option value="top_left">Top Left</option><option value="top_right">Top Right</option><option value="bottom_left">Bottom Left</option><option value="bottom_right">Bottom Right</option></select></div>
+        </div>
+        <div class="actions">
+          <label class="switch"><input id="reverseX" type="checkbox"/><span class="track"></span>Reverse X</label>
+          <label class="switch"><input id="reverseY" type="checkbox"/><span class="track"></span>Reverse Y</label>
+          <label class="switch"><input id="rotate90" type="checkbox"/><span class="track"></span>Rotate 90</label>
+        </div>
+      </div>
+
+      <div class="panel" data-panel="random">
+        <label class="switch"><input id="randomNormal" type="checkbox"/><span class="track"></span>Normal Random</label>
+        <div class="row two">
+          <div class="field"><label for="randomNormalInterval">Normal Interval</label><input id="randomNormalInterval" type="number" min="5" max="3600"/></div>
+          <label class="switch"><input id="randomNormalNoRepeat" type="checkbox"/><span class="track"></span>No Repeat</label>
+        </div>
+        <label class="switch"><input id="randomReactive" type="checkbox"/><span class="track"></span>Reactive Random</label>
+        <div class="row two">
+          <div class="field"><label for="randomReactiveInterval">Reactive Interval</label><input id="randomReactiveInterval" type="number" min="5" max="3600"/></div>
+          <label class="switch"><input id="randomReactiveNoRepeat" type="checkbox"/><span class="track"></span>No Repeat</label>
+        </div>
+        <div class="actions">
+          <label class="switch"><input id="randomIncludeStrip" type="checkbox"/><span class="track"></span>Strip</label>
+          <label class="switch"><input id="randomIncludeMatrix" type="checkbox"/><span class="track"></span>Matrix</label>
+          <label class="switch"><input id="randomReactiveFavorites" type="checkbox"/><span class="track"></span>Favorites</label>
+          <label class="switch"><input id="randomNormalFavorites" type="checkbox"/><span class="track"></span>Normal Favorites</label>
+        </div>
+      </div>
+
+      <div class="panel" data-panel="display">
+        <label class="switch"><input id="displayEnabled" type="checkbox"/><span class="track"></span>Display Power</label>
+        <div class="row">
+          <div class="field"><label for="displayView">View</label><select id="displayView"><option value="auto">Auto</option><option value="status">Status</option><option value="spectrum">Spectrum</option><option value="vu_meter">VU Meter</option><option value="waveform">Waveform</option></select></div>
+        </div>
+        <div class="field"><label for="displayTheme">Theme</label><select id="displayTheme"><option value="neon_dark">Neon Dark</option></select></div>
+        <div class="actions">
+          <label class="switch"><input id="displayShowFps" type="checkbox"/><span class="track"></span>Show FPS</label>
+          <label class="switch"><input id="displayShowWifi" type="checkbox"/><span class="track"></span>Show WiFi</label>
+        </div>
+      </div>
+
+      <div class="panel" data-panel="palette">
+        <div class="field"><label for="palette">Palette</label><select id="palette"></select></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+const $=id=>document.getElementById(id);
+const qs=s=>document.querySelector(s);
+const qsa=s=>Array.from(document.querySelectorAll(s));
+let cfg={},effects=[],audio={volume_8bit:0,spectrum_bands:[]},previewFrame=0,previewRun=false,raf=0,previewState={peaks:[],waterfall:[],stars:[]};
+const ranges={brightness:"brightnessVal",speed:"speedVal",intensity:"intensityVal",density:"densityVal",size:"sizeVal",tail:"tailVal",fade:"fadeVal",cooling:"coolingVal",sparking:"sparkingVal",sensitivity:"sensitivityVal",gain:"gainVal",smoothing:"smoothingVal"};
+const modeCategory=m=>m==="reactive_matrix"?"reactive_matrix":m;
+const hex=(r,g,b)=>"#"+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1);
+const rgb=h=>{let n=parseInt(h.slice(1),16);return{r:(n>>16)&255,g:(n>>8)&255,b:n&255,w:0}};
+function toast(msg){let t=$("toast");t.textContent=msg;t.classList.add("show");clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.classList.remove("show"),1900)}
+function sync(msg,bad){let s=$("syncLabel");s.textContent=msg;s.style.color=bad?"var(--danger)":"var(--muted)"}
+function debounce(fn,ms){let t;return function(){clearTimeout(t);let a=arguments;t=setTimeout(()=>fn.apply(this,a),ms)}}
+function netError(e){return e&&e.name==="AbortError"?"ESP32 tidak merespon":e&&e.message?e.message:"Koneksi ESP32 gagal"}
+async function api(url,opt){let ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),4500);try{let r=await fetch(url,Object.assign({cache:"no-store",signal:ctl.signal},opt||{}));let d=await r.json().catch(()=>({}));if(!r.ok||d.success===false)throw new Error(d.message||("HTTP "+r.status));return d}catch(e){throw new Error(netError(e))}finally{clearTimeout(tm)}}
+async function post(url,body){sync("Saving");let d=await api(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body||{})});sync("Saved");return d}
+function setRange(id,v){$(id).value=v;let o=ranges[id];if(o)$(o).textContent=v}
+function setPower(on){$("power").checked=!!on;$("powerDot").classList.toggle("off",!on);$("powerLabel").textContent=on?"On":"Off"}
+function effectActive(cat){if(cat==="normal")return cfg.animation;if(cat==="reactive")return cfg.active_reactive_effect;if(cat==="matrix")return cfg.active_matrix_effect;if(cat==="reactive_matrix")return cfg.active_rx_matrix_effect;return cfg.animation}
+function setEffectActive(cat,name){if(cat==="normal")cfg.animation=name;else if(cat==="reactive")cfg.active_reactive_effect=name;else if(cat==="matrix")cfg.active_matrix_effect=name;else cfg.active_rx_matrix_effect=name}
+function activeEffectMeta(cat,name){return effects.find(e=>e.category===cat&&e.name===name)||effects.find(e=>e.name===name)}
+function updateEffectControls(){let mode=cfg.operating_mode||$("mode").value,cat=modeCategory(mode),name=effectActive(cat)||$("effect").value,item=activeEffectMeta(cat,name),show=!item||item.supports_color!==false;$("colorControls").hidden=!show;$("backgroundColorField").hidden=!show}
+async function loadEffects(cat){let d=await api("/api/effects?category="+encodeURIComponent(cat));effects=d.effects||[];$("effect").innerHTML="";effects.forEach(e=>{let o=document.createElement("option");o.value=e.name;o.textContent=e.label;$("effect").appendChild(o)});let active=effectActive(cat);if(active)$("effect").value=active;renderSummary()}
+async function loadPalettes(){let d=await api("/api/palettes");$("palette").innerHTML="";(d.palettes||[]).forEach(p=>{let o=document.createElement("option");o.value=p.id;o.textContent=p.name.replace(/_/g," ");$("palette").appendChild(o)})}
+function renderSummary(){let mode=cfg.operating_mode||$("mode").value;let cat=modeCategory(mode);let eff=effectActive(cat)||$("effect").value||"-";$("summaryMode").textContent=mode;$("summaryEffect").textContent=eff;$("summaryBrightness").textContent=cfg.brightness||0;$("summaryMatrix").textContent=cfg.matrix&&cfg.matrix.enabled?"On":"Off";$("modeLabel").textContent=mode;$("activeLine").textContent=eff;$("previewMeta").textContent=((cfg.matrix&&cfg.matrix.width)||16)+" x "+((cfg.matrix&&cfg.matrix.height)||16);updateEffectControls()}
+function updateMatrixTotal(){let total=(+$("matrixWidth").value||0)*(+$("matrixHeight").value||0);$("matrixTotal").textContent=total+" LED";return total}
+function fill(c){cfg=c;setPower(c.power);$("deviceLine").textContent=c.device_name+(c.board&&c.board.target?" - "+c.board.target:"");$("deviceName").value=c.device_name;$("mode").value=c.operating_mode;$("ledType").value=c.led_type;$("ledPin").value=c.led_pin;$("ledCount").value=c.led_count;setRange("brightness",c.brightness);$("primaryColor").value=hex(c.color.r,c.color.g,c.color.b);$("secondaryColor").value=hex(c.secondary_color.r,c.secondary_color.g,c.secondary_color.b);$("backgroundColor").value=hex(c.background_color.r,c.background_color.g,c.background_color.b);setRange("speed",c.animation_speed);setRange("intensity",c.intensity);setRange("density",c.density);setRange("size",c.size);setRange("tail",c.tail_length);setRange("fade",c.fade_amount);setRange("cooling",c.cooling);setRange("sparking",c.sparking);$("direction").value=c.direction;$("loop").checked=c.loop;$("mirror").checked=c.mirror;$("randomColor").checked=c.random_color;$("customPattern").value=c.custom_pattern;$("palette").value=c.palette_id;let a=c.audio;["i2sBclk","i2sWs","i2sData","sampleRate","bufferSize","fftSize","noiseGate","beatThreshold","spectrumBands"].forEach(id=>{let k={i2sBclk:"i2s_bclk_pin",i2sWs:"i2s_ws_pin",i2sData:"i2s_data_pin",sampleRate:"sample_rate",bufferSize:"buffer_size",fftSize:"fft_size",noiseGate:"noise_gate",beatThreshold:"beat_threshold",spectrumBands:"spectrum_bands"}[id];$(id).value=a[k]});setRange("sensitivity",a.sensitivity);setRange("gain",a.gain);setRange("smoothing",a.smoothing);$("autoGain").checked=a.auto_gain;$("fftEnabled").checked=a.fft_enabled;$("bassBoost").checked=a.bass_boost;$("trebleBoost").checked=a.treble_boost;let m=c.matrix;$("matrixEnabled").checked=m.enabled;$("matrixWidth").value=m.width;$("matrixHeight").value=m.height;$("matrixLayout").value=m.layout;$("matrixOrigin").value=m.origin;$("reverseX").checked=m.reverse_x;$("reverseY").checked=m.reverse_y;$("rotate90").checked=m.rotate_90;let rn=c.random_normal,rr=c.random_reactive;$("randomNormal").checked=rn.enabled;$("randomNormalInterval").value=rn.interval_seconds;$("randomNormalNoRepeat").checked=rn.no_repeat;$("randomNormalFavorites").checked=rn.only_favorites;$("randomReactive").checked=rr.enabled;$("randomReactiveInterval").value=rr.interval_seconds;$("randomReactiveNoRepeat").checked=rr.no_repeat;$("randomIncludeStrip").checked=rr.include_strip;$("randomIncludeMatrix").checked=rr.include_matrix;$("randomReactiveFavorites").checked=rr.only_favorites;let d=c.display||{enabled:true,theme:"neon_dark",viewMode:"auto",showFps:true,showWifi:true};$("displayEnabled").checked=d.enabled;$("displayTheme").value=d.theme||"neon_dark";$("displayView").value=d.viewMode||"auto";$("displayShowFps").checked=d.showFps!==false;$("displayShowWifi").checked=d.showWifi!==false;updateMatrixTotal();renderSummary();syncPreview()}
+async function load(){try{sync("Loading");await loadPalettes();let c=await api("/api/config");fill(c);await loadEffects(modeCategory(c.operating_mode));sync("Ready")}catch(e){sync("Offline",true);toast(netError(e));clearTimeout(window.reloadTimer);window.reloadTimer=setTimeout(load,2500)}}
+function animationPayload(){return{speed:+$("speed").value,intensity:+$("intensity").value,density:+$("density").value,size:+$("size").value,tail_length:+$("tail").value,fade_amount:+$("fade").value,cooling:+$("cooling").value,sparking:+$("sparking").value,direction:$("direction").value,loop:$("loop").checked,mirror:$("mirror").checked,random_color:$("randomColor").checked,custom_pattern:$("customPattern").value,color:rgb($("primaryColor").value),secondary_color:rgb($("secondaryColor").value),background_color:rgb($("backgroundColor").value)}}
+async function saveAnimation(){try{await post("/api/animation",animationPayload());Object.assign(cfg,{animation_speed:+$("speed").value,intensity:+$("intensity").value,density:+$("density").value,size:+$("size").value,tail_length:+$("tail").value,fade_amount:+$("fade").value,cooling:+$("cooling").value,sparking:+$("sparking").value,direction:$("direction").value,loop:$("loop").checked,mirror:$("mirror").checked,random_color:$("randomColor").checked,custom_pattern:$("customPattern").value,color:rgb($("primaryColor").value),secondary_color:rgb($("secondaryColor").value),background_color:rgb($("backgroundColor").value)});syncPreview()}catch(e){sync("Error",true);toast(e.message);load()}}
+const saveAnimationDebounced=debounce(saveAnimation,250);
+async function saveAudio(){try{await post("/api/audio/config",{i2s_bclk_pin:+$("i2sBclk").value,i2s_ws_pin:+$("i2sWs").value,i2s_data_pin:+$("i2sData").value,sample_rate:+$("sampleRate").value,buffer_size:+$("bufferSize").value,fft_size:+$("fftSize").value,sensitivity:+$("sensitivity").value,gain:+$("gain").value,auto_gain:$("autoGain").checked,noise_gate:+$("noiseGate").value,smoothing:+$("smoothing").value,beat_threshold:+$("beatThreshold").value,fft_enabled:$("fftEnabled").checked,spectrum_bands:+$("spectrumBands").value,bass_boost:$("bassBoost").checked,treble_boost:$("trebleBoost").checked})}catch(e){sync("Error",true);toast(e.message);load()}}
+const saveAudioDebounced=debounce(saveAudio,350);
+async function saveMatrix(){try{let body={enabled:$("matrixEnabled").checked,width:+$("matrixWidth").value,height:+$("matrixHeight").value,layout:$("matrixLayout").value,origin:$("matrixOrigin").value,reverse_x:$("reverseX").checked,reverse_y:$("reverseY").checked,rotate_90:$("rotate90").checked};await post("/api/matrix",body);cfg.matrix=body;updateMatrixTotal();renderSummary();syncPreview()}catch(e){sync("Error",true);toast(e.message);load()}}
+const saveMatrixDebounced=debounce(saveMatrix,250);
+async function saveDisplay(){try{let body={enabled:$("displayEnabled").checked,theme:$("displayTheme").value,viewMode:$("displayView").value,showFps:$("displayShowFps").checked,showWifi:$("displayShowWifi").checked};await post("/api/display",body);cfg.display=body}catch(e){sync("Error",true);toast(e.message);load()}}
+async function saveRandom(){try{await post("/api/random",{random_normal:{enabled:$("randomNormal").checked,interval_seconds:+$("randomNormalInterval").value,no_repeat:$("randomNormalNoRepeat").checked,only_favorites:$("randomNormalFavorites").checked},random_reactive:{enabled:$("randomReactive").checked,interval_seconds:+$("randomReactiveInterval").value,no_repeat:$("randomReactiveNoRepeat").checked,include_strip:$("randomIncludeStrip").checked,include_matrix:$("randomIncludeMatrix").checked,only_favorites:$("randomReactiveFavorites").checked}})}catch(e){sync("Error",true);toast(e.message);load()}}
+const saveRandomDebounced=debounce(saveRandom,250);
+async function saveLed(){try{await post("/api/led",{led_type:$("ledType").value,led_pin:+$("ledPin").value,led_count:+$("ledCount").value});cfg.led_type=$("ledType").value;cfg.led_pin=+$("ledPin").value;cfg.led_count=+$("ledCount").value}catch(e){sync("Error",true);toast(e.message);load()}}
+const saveLedDebounced=debounce(saveLed,400);
+async function saveDevice(){try{await post("/api/config",{device_name:$("deviceName").value});cfg.device_name=$("deviceName").value;$("deviceLine").textContent=cfg.device_name}catch(e){sync("Error",true);toast(e.message);load()}}
+async function setPalette(){try{await post("/api/palette",{palette_id:+$("palette").value});cfg.palette_id=+$("palette").value}catch(e){sync("Error",true);toast(e.message);load()}}
+function bind(){Object.keys(ranges).forEach(id=>$(id).addEventListener("input",()=>{$(ranges[id]).textContent=$(id).value}));["speed","intensity","density","size","tail","fade","cooling","sparking"].forEach(id=>$(id).addEventListener("input",saveAnimationDebounced));["direction","customPattern","loop","mirror","randomColor","secondaryColor","backgroundColor"].forEach(id=>$(id).addEventListener("change",saveAnimation));["sensitivity","gain","smoothing"].forEach(id=>$(id).addEventListener("input",saveAudioDebounced));["i2sBclk","i2sWs","i2sData","sampleRate","bufferSize","fftSize","noiseGate","beatThreshold","spectrumBands","autoGain","fftEnabled","bassBoost","trebleBoost"].forEach(id=>$(id).addEventListener("change",saveAudio));["matrixEnabled","matrixLayout","matrixOrigin","reverseX","reverseY","rotate90"].forEach(id=>$(id).addEventListener("change",saveMatrix));["matrixWidth","matrixHeight"].forEach(id=>$(id).addEventListener("input",()=>{updateMatrixTotal();saveMatrixDebounced()}));["displayEnabled","displayTheme","displayView","displayShowFps","displayShowWifi"].forEach(id=>$(id).addEventListener("change",saveDisplay));["randomNormal","randomNormalNoRepeat","randomNormalFavorites","randomReactive","randomReactiveNoRepeat","randomIncludeStrip","randomIncludeMatrix","randomReactiveFavorites"].forEach(id=>$(id).addEventListener("change",saveRandom));["randomNormalInterval","randomReactiveInterval"].forEach(id=>$(id).addEventListener("input",saveRandomDebounced));["ledType","ledPin","ledCount"].forEach(id=>$(id).addEventListener("change",saveLedDebounced));$("matchLedCount").addEventListener("click",async()=>{let total=updateMatrixTotal();if(total<1||total>960){toast("Total LED harus 1-960");return}$("ledCount").value=total;await saveLed()});$("deviceName").addEventListener("change",saveDevice);$("palette").addEventListener("change",setPalette);$("primaryColor").addEventListener("change",async()=>{try{await post("/api/color",rgb($("primaryColor").value));cfg.color=rgb($("primaryColor").value);syncPreview()}catch(e){sync("Error",true);toast(e.message);load()}});$("brightness").addEventListener("input",debounce(async()=>{try{let b=+$("brightness").value;await post("/api/brightness",{brightness:b});cfg.brightness=b;renderSummary()}catch(e){sync("Error",true);toast(e.message);load()}},160));$("power").addEventListener("change",async()=>{let on=$("power").checked;setPower(on);try{await post("/api/power",{power:on});cfg.power=on;syncPreview()}catch(e){setPower(!on);sync("Error",true);toast(e.message)}});$("mode").addEventListener("change",async()=>{let m=$("mode").value;try{await post("/api/mode",{operating_mode:m});cfg.operating_mode=m;if(m==="matrix"||m==="reactive_matrix"){cfg.matrix.enabled=true;$("matrixEnabled").checked=true}await loadEffects(modeCategory(m));renderSummary();syncPreview()}catch(e){sync("Error",true);toast(e.message);load()}});$("effect").addEventListener("change",async()=>{let cat=modeCategory(cfg.operating_mode||$("mode").value),name=$("effect").value;try{await post("/api/effect",{category:cat,effect:name});setEffectActive(cat,name);renderSummary();syncPreview()}catch(e){sync("Error",true);toast(e.message);load()}});$("randomNext").addEventListener("click",async()=>{try{await post("/api/random/next",{operating_mode:cfg.operating_mode||$("mode").value});toast("Random updated");load()}catch(e){sync("Error",true);toast(e.message)}});$("openSettings").onclick=()=>$("settingsModal").classList.add("open");$("closeSettings").onclick=()=>$("settingsModal").classList.remove("open");$("settingsModal").addEventListener("click",e=>{if(e.target===$("settingsModal"))$("settingsModal").classList.remove("open")});$("factoryReset").onclick=async()=>{if(!confirm("Reset all settings?"))return;try{await post("/api/factory-reset",{});toast("Factory reset");load()}catch(e){sync("Error",true);toast(e.message)}};qsa(".tab").forEach(b=>b.onclick=()=>{qsa(".tab").forEach(x=>x.classList.toggle("active",x===b));qsa(".panel").forEach(p=>p.classList.toggle("active",p.dataset.panel===b.dataset.tab))})}
+async function pollAudio(){if(window.pollAudioBusy)return;window.pollAudioBusy=true;try{audio=await api("/api/audio/state");$("volumeText").textContent=audio.volume_8bit||0;$("volumeBar").style.width=Math.min(100,(audio.volume_8bit||0)*100/255)+"%";$("beatLabel").textContent="Beat "+(audio.beat_detected?"true":"false");$("bassText").textContent=audio.bass_level||0;$("midText").textContent=audio.mid_level||0;$("trebleText").textContent=audio.treble_level||0;$("peakText").textContent=audio.peak_level||0;$("noiseText").textContent=audio.noise_floor||0;$("gateText").textContent=audio.auto_gate_level||0;$("agcText").textContent=((audio.auto_gain_x100||100)/100).toFixed(2)+"x";$("clipText").textContent=audio.clipped_samples||0}catch(e){}finally{window.pollAudioBusy=false}}
+async function pollSystem(){if(window.pollSystemBusy)return;window.pollSystemBusy=true;try{let s=await api("/api/system"),avg=(s.render_avg_ms_x100||0)/100,fps=avg>0?Math.round(1000/avg):0;$("heapText").textContent=Math.round((s.free_heap||0)/1024)+" KB";$("fpsText").textContent=fps;$("clientText").textContent=s.wifi_clients||0;$("audioRunText").textContent=s.audio_running?"On":"Off";$("saveState").textContent=s.config_save_pending?"Saving pending":"Save idle"}catch(e){}finally{window.pollSystemBusy=false}}
+function syncPreview(){let show=cfg.power&&cfg.matrix&&cfg.matrix.enabled&&(cfg.operating_mode==="matrix"||cfg.operating_mode==="reactive_matrix");$("previewCard").hidden=!show;if(show&&!previewRun){previewRun=true;drawPreview()}else if(!show&&previewRun){previewRun=false;cancelAnimationFrame(raf)}}
+function drawPreview(){if(!previewRun)return;let cv=$("matrixCanvas"),ctx=cv.getContext("2d"),dpr=window.devicePixelRatio||1,w=cv.clientWidth||320,h=w;if(cv.width!==Math.floor(w*dpr)){cv.width=Math.floor(w*dpr);cv.height=Math.floor(h*dpr)}ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle="#020617";ctx.fillRect(0,0,w,h);let cols=Math.max(1,Math.min(32,(cfg.matrix&&cfg.matrix.width)||16)),rows=Math.max(1,Math.min(32,(cfg.matrix&&cfg.matrix.height)||16)),cell=Math.max(2,Math.floor(Math.min(w/cols,h/rows))),ox=(w-cell*cols)/2,oy=(h-cell*rows)/2,cat=modeCategory(cfg.operating_mode),eff=effectActive(cat)||"",speed=.25+((cfg.animation_speed||80)/85),t=previewFrame++*speed,bands=audio.spectrum_bands||[];let av=x=>bands.length?(bands[Math.min(bands.length-1,Math.floor(x*bands.length/cols))]||0):(audio.volume_8bit||0);let put=(x,y,hu,v)=>{ctx.fillStyle=hsl(hu,Math.max(0,Math.min(255,v)));ctx.fillRect(ox+x*cell+1,oy+y*cell+1,Math.max(1,cell-2),Math.max(1,cell-2))};if(cat==="reactive_matrix"){if(eff.indexOf("waterfall")>=0){let need=cols*rows;if(previewState.waterfall.length!==need)previewState.waterfall=Array(need).fill(0);for(let y=rows-1;y>0;y--)for(let x=0;x<cols;x++)previewState.waterfall[y*cols+x]=previewState.waterfall[(y-1)*cols+x];for(let x=0;x<cols;x++)previewState.waterfall[x]=av(x);for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){let v=previewState.waterfall[y*cols+x];put(x,y,230-v*.75,v)}}else if(eff.indexOf("peak")>=0){if(previewState.peaks.length!==cols)previewState.peaks=Array(cols).fill(0);for(let x=0;x<cols;x++){let a=av(x),bh=Math.round(a*rows/255);previewState.peaks[x]=Math.max(bh,previewState.peaks[x]-.12);for(let y=0;y<bh;y++)put(x,rows-1-y,120-y*72/rows,210);if(previewState.peaks[x]>0)put(x,Math.max(0,rows-Math.round(previewState.peaks[x])),44,255)}}else if(eff.indexOf("mirror")>=0||eff.indexOf("center")>=0){let mid=(rows-1)/2;for(let x=0;x<cols;x++){let span=Math.round(av(x)*(rows/2)/255);for(let y=0;y<=span;y++){put(x,Math.min(rows-1,Math.ceil(mid+y)),170+x*150/cols+y*8,210);put(x,Math.max(0,Math.floor(mid-y)),170+x*150/cols+y*8,210)}}}else if(eff.indexOf("pulse")>=0||eff.indexOf("flash")>=0){let v=audio.beat_detected?255:(audio.volume_8bit||0);for(let y=0;y<rows;y++)for(let x=0;x<cols;x++)put(x,y,320+v*.2,v)}else{for(let x=0;x<cols;x++){let a=av(x),bh=Math.round(a*rows/255),base=eff.indexOf("rainbow")>=0?(x*360/cols+t*3):120;for(let y=0;y<bh;y++)put(x,rows-1-y,base-y*90/rows,210)}}}else{for(let y=0;y<rows;y++){for(let x=0;x<cols;x++){let hu=180,v=5;if(eff.indexOf("rain")>=0){let drop=(x*7+t)% (rows+8),d=drop-y;v=d>=0&&d<6?255-d*38:3;hu=132}else if(eff.indexOf("rainbow")>=0){v=220;hu=(x*360/cols+t*4)%360}else if(eff.indexOf("fire")>=0||eff.indexOf("lava")>=0){v=Math.max(0,255-y*230/rows+Math.sin(x*.8+t*.1)*55);hu=v<120?12:42}else if(eff.indexOf("plasma")>=0||eff.indexOf("noise")>=0){v=150+(Math.sin(x*.5+t*.06)+Math.sin(y*.65+t*.08))*52;hu=(v+t*2+x*8)%360}else if(eff.indexOf("aurora")>=0){v=120+Math.sin(x*.55+t*.04+y*.28)*85;hu=145+y*5}else if(eff.indexOf("ripple")>=0){let cx=cols/2+Math.sin(t*.04)*cols*.25,cy=rows/2,dist=Math.hypot(x-cx,y-cy),ring=Math.abs((dist-t*.08)%6-3);v=ring<.9?240:6;hu=185}else if(eff.indexOf("star")>=0){let sparkle=((x*31+y*17+Math.floor(t))%37)===0;v=sparkle?255:4;hu=55}else if(eff.indexOf("waterfall")>=0){v=120+Math.sin(x*.8+(y+t)*.4)*100;hu=200}else if(eff.indexOf("block")>=0){let b=3+(cfg.animation_size||3)%6;v=205;hu=(Math.floor(x/b)*48+Math.floor(y/b)*72+t*2)%360}else if(eff.indexOf("spiral")>=0){let dx=x-cols/2,dy=y-rows/2,ang=Math.atan2(dy,dx),dist=Math.hypot(dx,dy);v=205;hu=(ang*57+dist*28+t*4+360)%360}else{v=170+Math.sin((x+y+t*.08)*.45)*70;hu=(x*12+y*7+t)%360}put(x,y,hu,v)}}}raf=requestAnimationFrame(drawPreview)}
+function hsl(h,v){return "hsl("+Math.round(h)+",85%,"+Math.max(8,Math.min(58,v/4.4))+"%)"}
+window.addEventListener("unhandledrejection",e=>{e.preventDefault();sync("Offline",true);toast(netError(e.reason))});
+bind();load();setInterval(pollAudio,650);setInterval(pollSystem,2200);
+</script>
+</body>
+</html>

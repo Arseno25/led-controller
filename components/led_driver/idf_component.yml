@@ -1,0 +1,7 @@
+## Managed dependencies for led_driver
+## Resolved by `idf.py reconfigure` into managed_components/
+
+dependencies:
+  espressif/led_strip: "^2.5.0"
+  idf:
+    version: ">=5.0"

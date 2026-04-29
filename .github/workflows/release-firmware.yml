@@ -1,0 +1,133 @@
+name: Release Firmware Builds
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version label for manual artifacts
+        required: false
+        default: dev
+
+permissions:
+  contents: write
+
+jobs:
+  changelog:
+    name: Update changelog
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    steps:
+      - name: Checkout default branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+
+      - name: Generate changelog section
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          git fetch --tags --force
+          python3 tools/update_changelog.py \
+            --version "$RELEASE_TAG" \
+            --ref "$RELEASE_TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --output CHANGELOG.md
+
+      - name: Commit changelog
+        run: |
+          if git diff --quiet CHANGELOG.md; then
+            echo "CHANGELOG.md already up to date"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md
+          git commit -m "docs(changelog): update for ${{ github.event.release.tag_name }}"
+          git push
+
+      - name: Upload changelog artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: changelog
+          path: CHANGELOG.md
+          if-no-files-found: error
+
+  build:
+    name: Build ${{ matrix.target }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - esp32
+          - esp32s2
+          - esp32s3
+          - esp32c3
+          - esp32c6
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build firmware
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}:/project" \
+            -w /project \
+            espressif/idf:release-v5.5 \
+            bash -lc "python tools/firmware.py build --target ${{ matrix.target }}"
+
+      - name: Fix generated file permissions
+        if: always()
+        run: |
+          sudo chown -R "$USER:$USER" \
+            "build-${{ matrix.target }}" \
+            managed_components \
+            "sdkconfig.${{ matrix.target }}" \
+            dependencies.lock 2>/dev/null || true
+
+      - name: Package firmware ZIP
+        env:
+          RELEASE_VERSION: ${{ github.event.release.tag_name || inputs.version || github.ref_name }}
+        run: |
+          python3 tools/package_release.py \
+            --target "${{ matrix.target }}" \
+            --version "$RELEASE_VERSION" \
+            --output-dir dist
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-${{ matrix.target }}
+          path: dist/*.zip
+          if-no-files-found: error
+
+  publish:
+    name: Upload ZIPs to GitHub Release
+    runs-on: ubuntu-latest
+    needs: [changelog, build]
+    if: github.event_name == 'release'
+    steps:
+      - name: Download firmware artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: firmware-*
+          path: dist
+          merge-multiple: true
+
+      - name: Download changelog artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: changelog
+          path: release-notes
+
+      - name: Attach ZIPs to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.zip
+            release-notes/CHANGELOG.md
